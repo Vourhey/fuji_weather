@@ -2,26 +2,17 @@
 # -*- coding: utf-8 -*-
 
 # Standart, System and Third party
-from rosbag import Bag
-from queue import Queue
-from ipfsapi import connect
-from threading import Thread
-from collections import namedtuple
+import json
 from http.client import HTTPConnection
-from tempfile import NamedTemporaryFile
 
 # ROS
 import rospy
 from std_msgs.msg import String
-from std_srvs.srv import Empty
 
 # AIRA
 from ipfs_common.msg import Multihash
 from ethereum_common.msg import Address
 from robonomics_msgs.msg import Demand, Result
-from robonomics_liability.msg import Liability
-from robonomics_liability.srv import StartLiability, StartLiabilityRequest
-from robonomics_liability.srv import FinishLiability, FinishLiabilityRequest
 
 
 class WorkerNode:
