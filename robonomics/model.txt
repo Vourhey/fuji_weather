@@ -1,0 +1,6 @@
+# Fuji Weather Agent
+
+A simple simulation of an open sensor data agnet
+
+Let's imagine we have a real sensor on the Fuji Mt. which is represented by OpenWeatherMap site
+The agent is able to tell what the temperature is on demand

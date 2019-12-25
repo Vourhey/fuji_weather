@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# Standart, System and Third party
+from rosbag import Bag
+from queue import Queue
+from ipfsapi import connect
+from threading import Thread
+from collections import namedtuple
+from http.client import HTTPConnection
+from tempfile import NamedTemporaryFile
+
+# ROS
+import rospy
+from std_msgs.msg import String
+from std_srvs.srv import Empty
+
+# AIRA
+from ipfs_common.msg import Multihash
+from ethereum_common.msg import Address
+from robonomics_msgs.msg import Demand, Result
+from robonomics_liability.msg import Liability
+from robonomics_liability.srv import StartLiability, StartLiabilityRequest
+from robonomics_liability.srv import FinishLiability, FinishLiabilityRequest
+
+
+class WorkerNode:
+    def __init__(self):
+        rospy.init_node('worker')
+        rospy.loginfo('Launching worker node...')
+
+        self.ipfs = connect('https://ipfs.infura.io', 5001)
+
+        rospy.Subscriber('/liability/infochan/incoming/demand', Demand, self.on_new_demand)
+
+        self.result = rospy.Publisher('/liability/infochan/eth/signing/result', Result, queue_size=128)
+
+        rospy.loginfo('Worker node launched.')
+
+    def on_new_demand(self, msg):
+        rospy.loginfo('Incoming demand:\n%s', str(msg))
+        if msg.model.multihash == rospy.get_param('~model'):
+            # account of sender
+            sender_account = msg.sender
+            rospy.loginfo('Demand sender: {}'.format(sender_account.address))
+
+            result_msg = self.make_result(sender_account, self.do_work())
+
+            self.result.publish(result_msg)
+
+    def make_result(self, sender_account: Address, data_msg: Multihash) -> Result:
+        res = Result()
+        res.success = True
+        res.liability = sender_account
+        res.result = data_msg
+
+        return res
+
+    def do_work(self):
+        api_key = rospy.get_param("~openweathermap_api_key")
+        c = HTTPConnection("api.openweathermap.org")
+        c.request("GET", "/data/2.5/weather?q=Fuji,jp&appid=" + api_key)
+        res = c.getresponse()
+
+        topics = {
+                "/data": [String(json.dumps( res.read().decode("utf-8") ))]
+                }
+        bag = IpfsRosBag(messages=topics)
+
+        return bag.multihash
+
+    def spin(self):
+        rospy.spin()
+
+
+if __name__ == '__main__':
+    WorkerNode().spin()
