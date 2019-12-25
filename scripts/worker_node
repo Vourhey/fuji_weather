@@ -13,6 +13,7 @@ from std_msgs.msg import String
 from ipfs_common.msg import Multihash
 from ethereum_common.msg import Address
 from robonomics_msgs.msg import Demand, Result
+from ipfs_common.ipfs_rosbag import IpfsRosBag
 
 
 class WorkerNode:
