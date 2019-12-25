@@ -59,11 +59,13 @@ class WorkerNode:
     def do_work(self):
         api_key = rospy.get_param("~openweathermap_api_key")
         c = HTTPConnection("api.openweathermap.org")
-        c.request("GET", "/data/2.5/weather?q=Fuji,jp&appid=" + api_key)
+        c.request("GET", "/data/2.5/weather?q=Fuji,jp&units=metric&appid=" + api_key)
         res = c.getresponse()
 
+        d = json.loads(res.read().decode('utf-8'))
+
         topics = {
-                "/data": [String(json.dumps( res.read().decode("utf-8") ))]
+                "/data": [String(json.dumps( d["main"] ))]
                 }
         bag = IpfsRosBag(messages=topics)
 

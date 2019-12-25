@@ -9,7 +9,6 @@ catkin_package()
 
 catkin_install_python(
     PROGRAMS
-        scripts/trader_node
         scripts/worker_node
     DESTINATION
         ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -17,8 +16,7 @@ catkin_install_python(
 
 install(
     FILES
-        launch/trader.launch
-        launch/worker.launch
+        launch/agent.launch
     DESTINATION
         ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
