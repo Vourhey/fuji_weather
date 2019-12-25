@@ -20,8 +20,6 @@ class WorkerNode:
         rospy.init_node('worker')
         rospy.loginfo('Launching worker node...')
 
-        self.ipfs = connect('https://ipfs.infura.io', 5001)
-
         rospy.Subscriber('/liability/infochan/incoming/demand', Demand, self.on_new_demand)
 
         self.result = rospy.Publisher('/liability/infochan/eth/signing/result', Result, queue_size=128)
