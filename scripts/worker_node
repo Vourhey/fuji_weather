@@ -4,6 +4,8 @@
 # Standart, System and Third party
 import json
 from http.client import HTTPConnection
+import socks
+from urllib.parse import urlparse
 
 # ROS
 import rospy
@@ -48,7 +50,13 @@ class WorkerNode:
 
     def do_work(self):
         api_key = rospy.get_param("~openweathermap_api_key")
-        c = HTTPConnection("api.openweathermap.org")
+        username = rospy.get_param("~username")
+        password = rospy.get_param("~password")
+        c = HTTPConnection("proxy.aira.life", 8888)
+        c.set_tunel("api.openweathermap.org")
+        c.sock = socks.socksocket()
+        c.sock.set_proxy(socks.PROXY_TYPE_SOCKS5, "proxy.aira.life", 8888, username=username, password=password)
+        c.sock.connect(("api.openweathermap.org", ))
         c.request("GET", "/data/2.5/weather?q=Fuji,jp&units=metric&appid=" + api_key)
         res = c.getresponse()
 

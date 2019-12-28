@@ -1,7 +1,11 @@
 <launch>
     <arg name="openweathermap_api_key" default="" />
+    <arg name="username" default="" />
+    <arg name="password" default="" />
     <node name="worker" pkg="fuji_weather" type="worker_node" output="screen">
         <param name="model" value="QmbQT8cj9TJKfYVaidfShnrEX1g14yTC9bdG1XbcRX73wY" />
         <param name="openweathermap_api_key" value="$(arg openweathermap_api_key)" />
+        <param name="username" value="$(arg username)" />
+        <param name="password" value="$(arg password)" />
     </node>
 </launch>

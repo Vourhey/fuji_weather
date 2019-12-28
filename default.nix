@@ -1,6 +1,7 @@
 { stdenv
 , mkRosPackage
 , robonomics_comm
+, python3Packages
 }:
 
 mkRosPackage rec {
@@ -10,12 +11,15 @@ mkRosPackage rec {
 
   src = ./.;
 
-  propagatedBuildInputs = [ robonomics_comm ];
+  propagatedBuildInputs = [
+    robonomics_comm
+    python3Packages.pysocks
+  ];
 
   meta = with stdenv.lib; {
     description = "Robonomics winter school fuji lesson";
-    homepage = http://github.com/airalab/robonomics-winter-school-2018;
+    homepage = http://github.com/vourhey/fuji_weather;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ akru ];
+    maintainers = with maintainers; [ vourhey ];
   };
 }
