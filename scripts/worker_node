@@ -53,7 +53,7 @@ class WorkerNode:
         username = rospy.get_param("~username")
         password = rospy.get_param("~password")
         c = HTTPConnection("proxy.aira.life", 8888)
-        c.set_tunel("api.openweathermap.org")
+        c.set_tunnel("api.openweathermap.org")
         c.sock = socks.socksocket()
         c.sock.set_proxy(socks.PROXY_TYPE_SOCKS5, "proxy.aira.life", 8888, username=username, password=password)
         c.sock.connect(("api.openweathermap.org", ))
