@@ -13,7 +13,7 @@ mkRosPackage rec {
 
   propagatedBuildInputs = [
     robonomics_comm
-    python3Packages.pysocks
+    python3Packages.requests
   ];
 
   meta = with stdenv.lib; {

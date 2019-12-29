@@ -3,9 +3,7 @@
 
 # Standart, System and Third party
 import json
-from http.client import HTTPConnection
-import socks
-from urllib.parse import urlparse
+import requests
 
 # ROS
 import rospy
@@ -52,18 +50,16 @@ class WorkerNode:
         api_key = rospy.get_param("~openweathermap_api_key")
         username = rospy.get_param("~username")
         password = rospy.get_param("~password")
-        c = HTTPConnection("proxy.aira.life", 8888)
-        c.set_tunnel("api.openweathermap.org")
-        c.sock = socks.socksocket()
-        c.sock.set_proxy(socks.PROXY_TYPE_SOCKS5, "proxy.aira.life", 8888, username=username, password=password)
-        c.sock.connect(("api.openweathermap.org", ))
-        c.request("GET", "/data/2.5/weather?q=Fuji,jp&units=metric&appid=" + api_key)
-        res = c.getresponse()
 
-        d = json.loads(res.read().decode('utf-8'))
+        url = "https://api.openweathermap.org/data/2.5/weather?q=Fuji,jp&units=metric&appid={}".format(api_key)
+        proxy_https = "socks5://{}:{}@proxy.aira.life:8888/".format(username, password)
+
+        res = requests.get(url, proxies={"https": proxy_https})
+
+        data = res.json()["main"]
 
         topics = {
-                "/data": [String(json.dumps( d["main"] ))]
+                "/data": [String(json.dumps( data ))]
                 }
         bag = IpfsRosBag(messages=topics)
 
