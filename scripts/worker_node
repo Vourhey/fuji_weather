@@ -57,6 +57,7 @@ class WorkerNode:
         res = requests.get(url, proxies={"https": proxy_https})
 
         data = res.json()["main"]
+        rospy.loginfo("Response: {}".format(data))
 
         topics = {
                 "/data": [String(json.dumps( data ))]
