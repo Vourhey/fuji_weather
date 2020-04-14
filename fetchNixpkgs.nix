@@ -1,5 +1,5 @@
-{ rev    ? "cb5daa39c2fbd855b2d1567074eab2fc4ff51fc8"             # The Git revision of nixpkgs to fetch
-, sha256 ? "1ljbqd580xgv5zrdbdmdl0fwr3lmq5mhrh8pybh0s8gmxn9mnk4c" # The SHA256 of the downloaded data
+{ rev    ? "8beae7204d6c01d3da1645ecd8bf836cfc44446a"             # The Git revision of nixpkgs to fetch
+, sha256 ? "1wdi5yrjxc0ipjfm2wp1hrs563rb6w2ipy07bbrh3686846ik5z2" # The SHA256 of the downloaded data
 }:
 
 builtins.fetchTarball {
